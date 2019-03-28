@@ -15,7 +15,9 @@ def sequel_connect(writer, reader, validation_frequency: nil, query_timeout: nil
   writer = writer.gsub 'mysql:', 'mysql2:'
 
   db_options = {
-    encoding: 'utf8mb4',
+    # encoding: 'utf8mb4',
+    auto_is_null: true,
+    timeout: nil,
     default_group: 'cdo',
 
     # Sequel connection-test setting.
