@@ -5,6 +5,7 @@ import acorn from '@code-dot-org/js-interpreter/acorn';
 import {getStore} from '../../../redux';
 import CustomMarshalingInterpreter from './CustomMarshalingInterpreter';
 import CustomMarshaler from './CustomMarshaler';
+import {generateAST} from '@code-dot-org/js-interpreter';
 
 import {setIsDebuggerPaused} from '../../../redux/runState';
 
@@ -136,6 +137,7 @@ export default class JSInterpreter {
    *        debugging (default 0)
    */
   parse(options) {
+    // debugger;
     this.calculateCodeInfo(options);
 
     if (!this.studioApp.hideSource && this.studioApp.editor) {
@@ -236,6 +238,7 @@ export default class JSInterpreter {
       // code to override globals of the same names)
 
       // Now append the user code:
+      // debugger;
       this.interpreter.appendCode(options.code);
       // And repopulate scope since appendCode() doesn't do this automatically:
       this.interpreter.populateScope_(this.interpreter.ast, this.globalScope);
@@ -243,6 +246,51 @@ export default class JSInterpreter {
       this.executionError = err;
       this.handleError();
     }
+  }
+
+  static getFunctionsWithComments(code) {
+    let functionsWithComments = [];
+    let comments = {};
+    let options = {
+      locations: true,
+      onComment: (block, text, start, end, startDetails, endDetails) => {
+        comments[end] = {block, text, start, end, startDetails, endDetails};
+        // console.log(`block: ${block}. text: ${text}. start: ${start}. end: ${end}. startFull: ${startDetails.line},${startDetails.column}. endFull: ${endDetails.line},${endDetails.column}.`);
+      }
+    };
+    let ast = generateAST(code, options);
+    // debugger;
+
+    let functions = ast.body.filter(obj => {
+      return obj.type === 'FunctionDeclaration';
+    });
+
+    functions.foreach(codefunction => {
+      let fullCommentString = '';
+      let comment = comments[codefunction.start - 1];
+      while (comment) {
+        fullCommentString += comment.text.trim() + '\n';
+        comment = comments[comment.start - 1];
+      }
+      fullCommentString.trim();
+      functionsWithComments.push({
+        comment: fullCommentString,
+        function: codefunction.id.name
+      });
+    });
+
+    // debugger;
+    // var functionsWithParms = {};
+    // var functions = this.interpreter.ast.body.filter(obj => {
+    //   return obj.type === 'FunctionDeclaration';
+    // });
+    // functions.map(obj => {
+    //   functionsWithParms[obj.id.name] = obj.params.map(param => {
+    //     return param.name;
+    //   });
+    // });
+
+    // return functionsWithParms;
   }
 
   /**
