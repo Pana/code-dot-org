@@ -880,7 +880,9 @@ describe('entry tests', () => {
         new StatsWriterPlugin({
           fields: ['assetsByChunkName', 'assets']
         }),
-        new ManifestPlugin()
+        new ManifestPlugin({
+          basePath: 'js/'
+        })
       ],
       minify: minify,
       watch: watch,
