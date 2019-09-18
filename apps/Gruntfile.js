@@ -199,7 +199,7 @@ describe('entry tests', () => {
         {
           expand: true,
           cwd: 'lib/blockly',
-          src: ['en_us.js'],
+          src: ['??_??.js'],
           dest: 'build/package/js',
           // e.g., ar_sa.js -> ar_sa/blockly_locale.js
           rename: function(dest, src) {
@@ -350,7 +350,7 @@ describe('entry tests', () => {
             return path.join(dest, outputPath);
           },
           expand: true,
-          src: ['i18n/**/en_us.json'],
+          src: ['i18n/**/*.json'],
           dest: 'build/package/js/'
         }
       ]
