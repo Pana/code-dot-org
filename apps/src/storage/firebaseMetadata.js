@@ -28,7 +28,7 @@ export function getColumnRefByName(tableName, columnName) {
 }
 
 export function getColumnNamesFromRecords(records) {
-  const columnNames = ['id'];
+  const columnNames = [];
   Object.keys(records).forEach(id => {
     const record = JSON.parse(records[id]);
     Object.keys(record).forEach(columnName => {
