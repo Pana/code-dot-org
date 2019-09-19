@@ -248,55 +248,75 @@ export default class JSInterpreter {
     }
   }
 
+  /**
+   * Builds a list of objects that contain all metadata about any functions in
+   * the gived code string. Each object in the returned list has the following
+   * properties:
+   * functionName - the name of the function
+   * parameters - the names of the parameters passed into the function
+   * comment - the comment describing the function. This could be in a JSDoc,
+   * multiline, singleline, or multiple singlelines format.
+   *
+   * @param {string} code - The code to be parsed for functions
+   */
   static getFunctionsWithComments(code) {
     let functionsWithComments = [];
-    let comments = {};
+    function getPreviousComment(allComments, startingLocation) {
+      return allComments.find(comment => {
+        return comment.endLocation === startingLocation - 1;
+      });
+    }
+
+    let comments = [];
     let options = {
       onComment: (isBlockComment, text, startLocation, endLocation) => {
-        comments[endLocation] = {
-          isBlockComment,
-          text,
-          startLocation,
-          endLocation
-        };
+        comments.push({isBlockComment, text, startLocation, endLocation});
       }
     };
 
+    // trim whitespace from the end of lines to ensure we correctly detect comments
+    code = code
+      .split('\n')
+      .map(line => {
+        // The regex /\s+$/gm detects whitespace at the end of a line
+        return line.replace(/\s+$/gm, '');
+      })
+      .join('\n');
     let ast = generateAST(code, options);
     let codeFunctions = ast.body.filter(node => {
       return node.type === 'FunctionDeclaration';
     });
 
     codeFunctions.forEach(codeFunction => {
-      let fullCommentString = '';
-      let comment = comments[codeFunction.start - 1];
+      let fullComment = '';
+      let comment = getPreviousComment(comments, codeFunction.start);
       if (comment && comment.isBlockComment) {
-        fullCommentString = comment.text;
-        if (fullCommentString[0] === '*') {
-          // For a JSDoc style comment, acorn doesn't strip the '*'' that starts
+        fullComment = comment.text;
+        if (fullComment[0] === '*') {
+          // For a JSDoc style comment, acorn doesn't strip the * that starts
           // each line, so we do that here.
-          fullCommentString = fullCommentString
+          fullComment = fullComment
             .substr(1)
             .split('\n * ')
             .join('\n');
         }
       } else {
         while (comment) {
-          fullCommentString = comment.text.trim() + '\n' + fullCommentString;
-          comment = comments[comment.startLocation - 1];
+          // Find all adjacent singleline comments preceding the function
+          fullComment = comment.text.trim() + '\n' + fullComment;
+          comment = getPreviousComment(comments, comment.startLocation);
         }
       }
-      fullCommentString = fullCommentString.trim().trim('\n');
+      fullComment = fullComment.trim();
 
-      let params = [];
-      params = codeFunction.params.map(param => {
+      let params = codeFunction.params.map(param => {
         return param.name;
       });
 
       functionsWithComments.push({
-        comment: fullCommentString,
-        function: codeFunction.id.name,
-        parameters: params
+        functionName: codeFunction.id.name,
+        parameters: params,
+        comment: fullComment
       });
     });
 
