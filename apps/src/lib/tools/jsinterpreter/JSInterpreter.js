@@ -252,45 +252,55 @@ export default class JSInterpreter {
     let functionsWithComments = [];
     let comments = {};
     let options = {
-      locations: true,
-      onComment: (block, text, start, end, startDetails, endDetails) => {
-        comments[end] = {block, text, start, end, startDetails, endDetails};
-        // console.log(`block: ${block}. text: ${text}. start: ${start}. end: ${end}. startFull: ${startDetails.line},${startDetails.column}. endFull: ${endDetails.line},${endDetails.column}.`);
+      onComment: (isBlockComment, text, startLocation, endLocation) => {
+        comments[endLocation] = {
+          isBlockComment,
+          text,
+          startLocation,
+          endLocation
+        };
       }
     };
-    let ast = generateAST(code, options);
-    // debugger;
 
-    let functions = ast.body.filter(obj => {
-      return obj.type === 'FunctionDeclaration';
+    let ast = generateAST(code, options);
+    let codeFunctions = ast.body.filter(node => {
+      return node.type === 'FunctionDeclaration';
     });
 
-    functions.foreach(codefunction => {
+    codeFunctions.forEach(codeFunction => {
       let fullCommentString = '';
-      let comment = comments[codefunction.start - 1];
-      while (comment) {
-        fullCommentString += comment.text.trim() + '\n';
-        comment = comments[comment.start - 1];
+      let comment = comments[codeFunction.start - 1];
+      if (comment && comment.isBlockComment) {
+        fullCommentString = comment.text;
+        if (fullCommentString[0] === '*') {
+          // For a JSDoc style comment, acorn doesn't strip the '*'' that starts
+          // each line, so we do that here.
+          fullCommentString = fullCommentString
+            .substr(1)
+            .split('\n * ')
+            .join('\n');
+        }
+      } else {
+        while (comment) {
+          fullCommentString = comment.text.trim() + '\n' + fullCommentString;
+          comment = comments[comment.startLocation - 1];
+        }
       }
-      fullCommentString.trim();
+      fullCommentString = fullCommentString.trim().trim('\n');
+
+      let params = [];
+      params = codeFunction.params.map(param => {
+        return param.name;
+      });
+
       functionsWithComments.push({
         comment: fullCommentString,
-        function: codefunction.id.name
+        function: codeFunction.id.name,
+        parameters: params
       });
     });
 
-    // debugger;
-    // var functionsWithParms = {};
-    // var functions = this.interpreter.ast.body.filter(obj => {
-    //   return obj.type === 'FunctionDeclaration';
-    // });
-    // functions.map(obj => {
-    //   functionsWithParms[obj.id.name] = obj.params.map(param => {
-    //     return param.name;
-    //   });
-    // });
-
-    // return functionsWithParms;
+    return functionsWithComments;
   }
 
   /**

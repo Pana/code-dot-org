@@ -350,11 +350,7 @@ Applab.setLevelHtml = function(html) {
 };
 
 Applab.getFunctions = function() {
-  // let initializedInterpreter = new JSInterpreter({
-  //   studioApp: studioApp()
-  // });
-
-  getFunctionsWithComments(Applab.getCode());
+  return getFunctionsWithComments(Applab.getCode());
 };
 
 Applab.onTick = function() {
