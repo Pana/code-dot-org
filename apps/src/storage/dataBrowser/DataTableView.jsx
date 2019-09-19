@@ -9,7 +9,7 @@ import FontAwesome from '../../templates/FontAwesome';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import React from 'react';
-import {changeView, showWarning} from '../redux/data';
+import {changeView, showWarning, tableType} from '../redux/data';
 import * as dataStyles from './dataStyles';
 import color from '../../util/color';
 import {connect} from 'react-redux';
@@ -74,6 +74,7 @@ class DataTableView extends React.Component {
     // https://firebase.googleblog.com/2014/04/best-practices-arrays-in-firebase.html
     tableRecords: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
       .isRequired,
+    tableListMap: PropTypes.object.isRequired,
     view: PropTypes.oneOf(Object.keys(DataView)),
 
     // from redux dispatch
@@ -207,7 +208,12 @@ class DataTableView extends React.Component {
         />
         <div style={debugDataStyle}>{this.getTableJson()}</div>
         {!this.state.showDebugView && (
-          <DataTable getColumnNames={this.getColumnNames} />
+          <DataTable
+            getColumnNames={this.getColumnNames}
+            readOnly={
+              this.props.tableListMap[this.props.tableName] === tableType.SHARED
+            }
+          />
         )}
       </div>
     );
@@ -219,7 +225,8 @@ export default connect(
     view: state.data.view,
     tableColumns: state.data.tableColumns || [],
     tableRecords: state.data.tableRecords || {},
-    tableName: state.data.tableName || ''
+    tableName: state.data.tableName || '',
+    tableListMap: state.data.tableListMap || {}
   }),
   dispatch => ({
     onShowWarning(warningMsg, warningTitle) {
