@@ -30,6 +30,7 @@ import {
   addMissingColumns,
   getColumnsRef
 } from './firebaseMetadata';
+import {tableType} from './redux/data';
 
 /**
  * Namespace for Firebase storage.
@@ -456,6 +457,24 @@ FirebaseStorage.resetForTesting = function() {
   resetConfigForTesting();
 };
 
+FirebaseStorage.addCurrentTableToProject = function(
+  tableName,
+  onSuccess,
+  onError
+) {
+  return incrementRateLimitCounters()
+    .then(loadConfig)
+    .then(config => {
+      return enforceTableCount(config, tableName);
+    })
+    .then(() => {
+      getProjectDatabase()
+        .child(`current_tables/${tableName}`)
+        .set(true);
+    })
+    .then(onSuccess, onError);
+};
+
 FirebaseStorage.copyStaticTable = function(tableName, onSuccess, onError) {
   return incrementRateLimitCounters()
     .then(loadConfig)
@@ -527,16 +546,23 @@ FirebaseStorage.createTable = function(tableName, onSuccess, onError) {
  * @param {function ()} onSuccess
  * @param {function (string)} onError
  */
-FirebaseStorage.deleteTable = function(tableName, onSuccess, onError) {
-  const tableRef = getProjectDatabase().child(`storage/tables/${tableName}`);
-  const countersRef = getProjectDatabase().child(
-    `counters/tables/${tableName}`
-  );
-  tableRef
-    .set(null)
-    .then(() => countersRef.set(null))
-    .then(() => getColumnsRef(getProjectDatabase(), tableName).set(null))
-    .then(onSuccess, onError);
+FirebaseStorage.deleteTable = function(tableName, type, onSuccess, onError) {
+  if (type === tableType.SHARED) {
+    getProjectDatabase()
+      .child(`current_tables/${tableName}`)
+      .set(null)
+      .then(onSuccess, onError);
+  } else {
+    const tableRef = getProjectDatabase().child(`storage/tables/${tableName}`);
+    const countersRef = getProjectDatabase().child(
+      `counters/tables/${tableName}`
+    );
+    tableRef
+      .set(null)
+      .then(() => countersRef.set(null))
+      .then(() => getColumnsRef(getProjectDatabase(), tableName).set(null))
+      .then(onSuccess, onError);
+  }
 };
 
 /**
