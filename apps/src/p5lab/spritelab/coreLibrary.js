@@ -278,5 +278,7 @@ export function removeBehavior(sprite, behavior) {
 }
 
 export function runBehaviors() {
-  behaviors.forEach(behavior => behavior.func(behavior.sprite.id));
+  behaviors.forEach(behavior =>
+    behavior.func(getSpriteByName(behavior.sprite.name))
+  );
 }

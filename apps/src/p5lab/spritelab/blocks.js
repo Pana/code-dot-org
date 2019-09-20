@@ -336,7 +336,7 @@ export default {
       },
       removeVar: Blockly.Blocks.variables_get.removeVar
     };
-    generator.sprite_variables_get = function(block, arg) {
+    generator.sprite_variables_get = function() {
       return [
         `getSpriteByName('${this.getTitleValue('VAR')}')`,
         Blockly.JavaScript.ORDER_ATOMIC

@@ -1,5 +1,3 @@
-import * as coreLibrary from '../coreLibrary';
-
 export const commands = {
   locationAt(x, y) {
     return {x: x, y: 400 - y};
@@ -9,8 +7,8 @@ export const commands = {
     return {x: this.World.mouseX, y: this.World.mouseY};
   },
 
-  locationOf(spriteId) {
-    let sprite = coreLibrary.getSpriteArray(spriteId)[0];
+  locationOf(sprites) {
+    let sprite = sprites[0];
     if (sprite) {
       return {x: sprite.x, y: sprite.y};
     }
