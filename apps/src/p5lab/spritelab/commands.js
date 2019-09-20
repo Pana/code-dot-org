@@ -149,7 +149,9 @@ export const commands = {
    * to the generated function.
    */
   createNewSprite(name, animation, location) {
-    return spriteCommands.makeSprite.apply(this, [animation, location]);
+    return spriteCommands.makeSprite.apply(this, [
+      {name: name, animation: animation, location: location}
+    ]);
   },
 
   destroy(spriteId) {

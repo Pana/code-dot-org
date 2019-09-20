@@ -34,6 +34,16 @@ function allSpritesWithAnimation(animation) {
   return group;
 }
 
+function getSpriteByName(name) {
+  let sprite;
+  Object.keys(nativeSpriteMap).forEach(spriteId => {
+    if (nativeSpriteMap[spriteId].name === name) {
+      sprite = nativeSpriteMap[spriteId];
+    }
+  });
+  return sprite;
+}
+
 /**
  * Returns a list of sprites, specified either by id or animation name.
  * @param {(string|number)} spriteOrGroup - Either the id or the animation name
@@ -41,16 +51,7 @@ function allSpritesWithAnimation(animation) {
  * the specified id, or a list containing all sprites with the specified animation.
  */
 export function getSpriteArray(spriteOrGroup) {
-  if (typeof spriteOrGroup === 'number') {
-    const sprite = nativeSpriteMap[spriteOrGroup];
-    if (sprite) {
-      return [sprite];
-    }
-  }
-  if (typeof spriteOrGroup === 'string') {
-    return allSpritesWithAnimation(spriteOrGroup);
-  }
-  return [];
+  return [getSpriteByName(spriteOrGroup)];
 }
 
 export function getAnimationsInUse() {
@@ -102,8 +103,11 @@ export function getSpriteIdsInUse() {
  * @param {Sprite} sprite
  * @returns {Number} A unique id to reference the sprite.
  */
-export function addSprite(sprite) {
+export function addSprite(sprite, name) {
   nativeSpriteMap[spriteId] = sprite;
+  if (name) {
+    sprite.name = name;
+  }
   sprite.id = spriteId;
   spriteId++;
   return sprite.id;
