@@ -227,13 +227,13 @@ describe('entry tests', () => {
           expand: true,
           cwd: './node_modules/@code-dot-org/p5/lib',
           src: ['p5.js'],
-          dest: 'build/package/js/p5play/'
+          dest: 'build/lib/p5play/'
         },
         {
           expand: true,
           cwd: './node_modules/@code-dot-org/p5.play/lib',
           src: ['p5.play.js'],
-          dest: 'build/package/js/p5play/'
+          dest: 'build/lib/p5play/'
         },
         {
           expand: true,
@@ -242,19 +242,19 @@ describe('entry tests', () => {
           // If we provide it as a relative path, that does not happen
           cwd: './' + path.relative(process.cwd(), piskelRoot),
           src: ['**'],
-          dest: 'build/package/js/piskel/'
+          dest: 'build/lib/piskel/'
         },
         {
           expand: true,
           cwd: './node_modules/@code-dot-org/bramble/dist',
           src: ['**'],
-          dest: 'build/package/js/bramble/'
+          dest: 'build/lib/bramble/'
         },
         {
           expand: true,
           cwd: 'lib/droplet',
           src: ['droplet-full*.js'],
-          dest: 'build/package/js/droplet/'
+          dest: 'build/lib/droplet/'
         },
         {
           expand: true,
@@ -266,19 +266,19 @@ describe('entry tests', () => {
           expand: true,
           cwd: 'lib/tooltipster',
           src: ['*.js'],
-          dest: 'build/package/js/tooltipster/'
+          dest: 'build/lib/tooltipster/'
         },
         {
           expand: true,
           cwd: 'lib/marked',
           src: ['marked*.js'],
-          dest: 'build/package/js/marked/'
+          dest: 'build/lib/marked/'
         },
         {
           expand: true,
           cwd: 'lib/phaser',
           src: ['*.js'],
-          dest: 'build/package/js/phaser/'
+          dest: 'build/lib/phaser/'
         },
         {
           expand: true,
@@ -290,7 +290,7 @@ describe('entry tests', () => {
           expand: true,
           cwd: 'lib/fileupload',
           src: ['*.js'],
-          dest: 'build/package/js/fileupload/'
+          dest: 'build/lib/fileupload/'
         }
       ]
     }
@@ -884,6 +884,11 @@ describe('entry tests', () => {
         new CopyPlugin([
           {
             from: 'build/locales',
+            to: '[path]/[name].[hash].[ext]',
+            toType: 'template'
+          },
+          {
+            from: 'build/lib',
             to: '[path]/[name].[hash].[ext]',
             toType: 'template'
           }
