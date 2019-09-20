@@ -723,6 +723,25 @@ Applab.init = function(config) {
     });
   }
 
+  // debugger;
+  config.dropletConfig.additionalPredefValues.push('mySampleLibrary');
+  config.dropletConfig.blocks.push({
+    func: 'mySampleLibrary.myCoolFunction',
+    category: 'Functions',
+    scope: (function() {
+      function myCoolFunction() {
+        console.log('testing...testing...one...two...three');
+      }
+      return {myCoolFunction: myCoolFunction};
+    })(),
+    parent: 'mySampleLibrary.myCoolFunction'
+  });
+  // config.dropletConfig.blocks.push({
+  //   "func": "mySampleLibrary",
+  //   "parent": {"mySampleLibrary": "var mySampleLibrary = (function() {function myCoolFunction() {console.log('test');} return {myCoolFunction: myCoolFunction};})();"}
+  // });
+  level.codeFunctions['mySampleLibrary.myCoolFunction'] = null;
+
   // Set the custom set of blocks (may have had maker blocks merged in) so
   // we can later pass the custom set to the interpreter.
   config.level.levelBlocks = config.dropletConfig.blocks;

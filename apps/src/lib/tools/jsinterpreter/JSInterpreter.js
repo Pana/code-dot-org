@@ -194,6 +194,7 @@ export default class JSInterpreter {
           this.interpreter = interpreter;
           // Store globalScope on JSInterpreter
           this.globalScope = scope;
+          // debugger;
           codegen.initJSInterpreter(
             interpreter,
             options.blocks,
@@ -236,6 +237,7 @@ export default class JSInterpreter {
       // code to override globals of the same names)
 
       // Now append the user code:
+      // options.code += "var mySampleLibrary = (function() {function myCoolFunction() {console.log('test');} return {myCoolFunction: myCoolFunction};})();";
       this.interpreter.appendCode(options.code);
       // And repopulate scope since appendCode() doesn't do this automatically:
       this.interpreter.populateScope_(this.interpreter.ast, this.globalScope);
