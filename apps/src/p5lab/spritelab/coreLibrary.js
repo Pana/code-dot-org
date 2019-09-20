@@ -21,7 +21,7 @@ export function reset() {
  * Called on each tick of the draw loop because animations can change throughout runtime.
  * @param {string} animation - animation name
  */
-function allSpritesWithAnimation(animation) {
+export function allSpritesWithAnimation(animation) {
   let group = [];
   Object.keys(nativeSpriteMap).forEach(spriteId => {
     if (nativeSpriteMap[spriteId].getAnimationLabel() === animation) {
@@ -34,24 +34,14 @@ function allSpritesWithAnimation(animation) {
   return group;
 }
 
-function getSpriteByName(name) {
+export function getSpriteByName(name) {
   let sprite;
   Object.keys(nativeSpriteMap).forEach(spriteId => {
     if (nativeSpriteMap[spriteId].name === name) {
       sprite = nativeSpriteMap[spriteId];
     }
   });
-  return sprite;
-}
-
-/**
- * Returns a list of sprites, specified either by id or animation name.
- * @param {(string|number)} spriteOrGroup - Either the id or the animation name
- * @return {[Sprite]} List of sprites that match the parameter. Either a list containing the one sprite
- * the specified id, or a list containing all sprites with the specified animation.
- */
-export function getSpriteArray(spriteOrGroup) {
-  return [getSpriteByName(spriteOrGroup)];
+  return [sprite];
 }
 
 export function getAnimationsInUse() {
@@ -163,8 +153,8 @@ function whenTouchEvent(inputEvent) {
     }
     map[spriteId][targetId].firedOnce = fired;
   };
-  let sprites = getSpriteArray(inputEvent.args.sprite1);
-  let targets = getSpriteArray(inputEvent.args.sprite2);
+  let sprites = inputEvent.args.sprite1;
+  let targets = inputEvent.args.sprite2;
   let callbackArgList = [];
   let previousCollisions = inputEvent.previous;
 
@@ -195,8 +185,8 @@ function whenTouchEvent(inputEvent) {
 
 function whileTouchEvent(inputEvent) {
   let callbackArgList = [];
-  let sprites = getSpriteArray(inputEvent.args.sprite1);
-  let targets = getSpriteArray(inputEvent.args.sprite2);
+  let sprites = inputEvent.args.sprites;
+  let targets = inputEvent.args.targets;
   sprites.forEach(sprite => {
     targets.forEach(target => {
       if (sprite.overlap(target)) {
@@ -210,7 +200,7 @@ function whileTouchEvent(inputEvent) {
 function whenClickEvent(inputEvent, p5Inst) {
   let callbackArgList = [];
   if (p5Inst.mouseWentDown('leftButton')) {
-    let sprites = getSpriteArray(inputEvent.args.sprite);
+    let sprites = inputEvent.args.sprites;
     sprites.forEach(sprite => {
       if (p5Inst.mouseIsOver(sprite)) {
         callbackArgList.push({sprite: sprite.id});
@@ -222,7 +212,7 @@ function whenClickEvent(inputEvent, p5Inst) {
 
 function whileClickEvent(inputEvent, p5Inst) {
   let callbackArgList = [];
-  let sprites = getSpriteArray(inputEvent.args.sprite);
+  let sprites = inputEvent.args.sprites;
   sprites.forEach(sprite => {
     if (p5Inst.mousePressedOver(sprite)) {
       callbackArgList.push({sprite: sprite.id});

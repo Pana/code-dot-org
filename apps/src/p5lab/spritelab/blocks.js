@@ -338,7 +338,7 @@ export default {
     };
     generator.sprite_variables_get = function(block, arg) {
       return [
-        `'${this.getTitleValue('VAR')}'`,
+        `getSpriteByName('${this.getTitleValue('VAR')}')`,
         Blockly.JavaScript.ORDER_ATOMIC
       ];
     };

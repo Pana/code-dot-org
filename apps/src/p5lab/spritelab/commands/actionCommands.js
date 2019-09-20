@@ -2,11 +2,10 @@ import * as coreLibrary from '../coreLibrary';
 import {commands as behaviorCommands} from './behaviorCommands';
 
 export const commands = {
-  changePropBy(spriteId, prop, val) {
+  changePropBy(sprites, prop, val) {
     if (val === undefined || prop === undefined) {
       return;
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     let specialCases = {
       direction: sprite => (sprite.direction = (sprite.direction + val) % 360),
       scale: sprite => {
@@ -25,18 +24,16 @@ export const commands = {
       }
     });
   },
-  edgesDisplace(spriteId) {
+  edgesDisplace(sprites) {
     if (!this.edges) {
       this.createEdgeSprites();
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     sprites.forEach(sprite => this.edges.displace(sprite));
   },
-  isTouchingEdges(spriteId) {
+  isTouchingEdges(sprites) {
     if (!this.edges) {
       this.createEdgeSprites();
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     let touching = false;
     sprites.forEach(sprite => {
       if (sprite.isTouching(this.edges)) {
@@ -45,18 +42,16 @@ export const commands = {
     });
     return touching;
   },
-  jumpTo(spriteId, location) {
+  jumpTo(sprites, location) {
     if (!location) {
       return;
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     sprites.forEach(sprite => {
       sprite.x = location.x;
       sprite.y = location.y;
     });
   },
-  mirrorSprite(spriteId, direction) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  mirrorSprite(sprites, direction) {
     sprites.forEach(sprite => {
       if (direction === 'right') {
         sprite.mirrorX(1);
@@ -65,8 +60,7 @@ export const commands = {
       }
     });
   },
-  moveForward(spriteId, distance) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  moveForward(sprites, distance) {
     sprites.forEach(sprite => {
       if (!sprite.direction) {
         sprite.direction = 0;
@@ -76,8 +70,7 @@ export const commands = {
       sprite.y += distance * Math.sin((direction * Math.PI) / 180);
     });
   },
-  moveInDirection(spriteId, distance, direction) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  moveInDirection(sprites, distance, direction) {
     let dirs = {
       North: sprite => (sprite.y -= distance),
       East: sprite => (sprite.x += distance),
@@ -92,8 +85,7 @@ export const commands = {
       dirs[direction](sprite);
     });
   },
-  moveToward(spriteId, distance, target) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  moveToward(sprites, distance, target) {
     sprites.forEach(sprite => {
       if (sprite && target) {
         let angle = Math.atan2(target.y - sprite.y, target.x - sprite.x);
@@ -106,11 +98,10 @@ export const commands = {
       }
     });
   },
-  setProp(spriteId, prop, val) {
+  setProp(sprites, prop, val) {
     if (val === undefined) {
       return;
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     let specialCases = {
       direction: sprite => (sprite.direction = val % 360),
       draggable: sprite => {
@@ -141,11 +132,10 @@ export const commands = {
       }
     });
   },
-  turn(spriteId, degrees, direction) {
+  turn(sprites, degrees, direction) {
     if (!degrees) {
       return;
     }
-    let sprites = coreLibrary.getSpriteArray(spriteId);
     sprites.forEach(sprite => {
       if (direction === 'right') {
         sprite.rotation += degrees;

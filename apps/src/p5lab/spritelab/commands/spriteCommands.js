@@ -1,12 +1,19 @@
 import * as coreLibrary from '../coreLibrary';
 
 export const commands = {
+  allSpritesWithAnimation(animation) {
+    return coreLibrary.allSpritesWithAnimation(animation);
+  },
+
+  getSpriteByName(name) {
+    return coreLibrary.getSpriteByName(name);
+  },
+
   countByAnimation(animation) {
-    let sprites = coreLibrary.getSpriteArray(animation);
+    let sprites = coreLibrary.allSpritesWithAnimation(animation);
     return sprites.length;
   },
-  destroy(spriteId) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  destroy(sprites) {
     sprites.forEach(sprite => {
       sprite.destroy();
       coreLibrary.removeAllBehaviors(sprite);
@@ -14,16 +21,14 @@ export const commands = {
     });
   },
 
-  displace(spriteId, targetSpriteIndex) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
-    let targetSprites = coreLibrary.getSpriteArray(targetSpriteIndex);
+  displace(sprites, targetSprites) {
     sprites.forEach(sprite => {
       targetSprites.forEach(target => sprite.displace(target));
     });
   },
 
-  getProp(spriteId, prop) {
-    let sprite = coreLibrary.getSpriteArray(spriteId)[0];
+  getProp(sprites, prop) {
+    let sprite = sprites[0];
     if (sprite !== undefined) {
       if (prop === 'scale') {
         return sprite.getScale() * 100;
@@ -83,8 +88,7 @@ export const commands = {
     return spriteId;
   },
 
-  setAnimation(spriteId, animation) {
-    let sprites = coreLibrary.getSpriteArray(spriteId);
+  setAnimation(sprites, animation) {
     sprites.forEach(sprite => {
       sprite.setAnimation(animation);
       sprite.scale /= sprite.baseScale;
