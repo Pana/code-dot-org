@@ -884,12 +884,12 @@ describe('entry tests', () => {
         new CopyPlugin([
           {
             from: 'build/locales',
-            to: '[path]/[name].[hash].[ext]',
+            to: minify ? '[path]/[name].[hash].[ext]' : '[path]/[name].[ext]',
             toType: 'template'
           },
           {
             from: 'build/lib',
-            to: '[path]/[name].[hash].[ext]',
+            to: minify ? '[path]/[name].[hash].[ext]' : '[path]/[name].[ext]',
             toType: 'template'
           }
         ]),
