@@ -161,18 +161,16 @@ export default class JSInterpreter {
               arguments: args
             });
 
-            if (!this.isExecuting) {
-              // Execute the interpreter and if a return value is sent back from the
-              // interpreter's event handler, pass that back in the native world
+            // Execute the interpreter and if a return value is sent back from the
+            // interpreter's event handler, pass that back in the native world
 
-              // NOTE: the interpreter will not execute forever, if the event handler
-              // takes too long, executeInterpreter() will return and the native side
-              // will just see 'undefined' as the return value. The rest of the interpreter
-              // event handler will run in the next onTick(), but the return value will
-              // no longer have any effect.
-              this.executeInterpreter(false, true);
-              return this.lastCallbackRetVal;
-            }
+            // NOTE: the interpreter will not execute forever, if the event handler
+            // takes too long, executeInterpreter() will return and the native side
+            // will just see 'undefined' as the return value. The rest of the interpreter
+            // event handler will run in the next onTick(), but the return value will
+            // no longer have any effect.
+            this.executeInterpreter(false, true);
+            return this.lastCallbackRetVal;
           }
         };
         if (intFunc && intFunc.node && intFunc.node.id) {
@@ -432,12 +430,6 @@ export default class JSInterpreter {
    * @param {boolean} runUntilCallbackReturn Exit after processing event callback
    */
   executeInterpreter(firstStep, runUntilCallbackReturn) {
-    if (this.isExecuting) {
-      console.error(
-        'Attempt to call executeInterpreter while already executing ignored'
-      );
-      return;
-    }
     this.isExecuting = true;
     this.runUntilCallbackReturn = runUntilCallbackReturn;
     if (runUntilCallbackReturn) {

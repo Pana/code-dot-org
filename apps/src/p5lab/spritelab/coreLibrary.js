@@ -206,7 +206,7 @@ function whileTouchEvent(inputEvent) {
 function whenClickEvent(inputEvent, p5Inst) {
   let callbackArgList = [];
   if (p5Inst.mouseWentDown('leftButton')) {
-    let sprites = getSpriteArray(inputEvent.args.sprite);
+    let sprites = getSpriteArray(inputEvent.args.sprite());
     sprites.forEach(sprite => {
       if (p5Inst.mouseIsOver(sprite)) {
         callbackArgList.push({sprite: sprite.id});
