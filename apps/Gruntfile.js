@@ -226,14 +226,14 @@ describe('entry tests', () => {
         {
           expand: true,
           cwd: './node_modules/@code-dot-org/p5/lib',
-          src: ['p5.js'],
-          dest: 'build/lib/p5play/'
+          src: ['p5.js', 'p5.min.js'],
+          dest: 'build/minifiable-lib/p5play/'
         },
         {
           expand: true,
           cwd: './node_modules/@code-dot-org/p5.play/lib',
-          src: ['p5.play.js'],
-          dest: 'build/lib/p5play/'
+          src: ['p5.play.js', 'p5.play.min.js'],
+          dest: 'build/minifiable-lib/p5play/'
         },
         {
           expand: true,
@@ -254,7 +254,7 @@ describe('entry tests', () => {
           expand: true,
           cwd: 'lib/droplet',
           src: ['droplet-full*.js'],
-          dest: 'build/lib/droplet/'
+          dest: 'build/minifiable-lib/droplet/'
         },
         {
           expand: true,
@@ -266,19 +266,19 @@ describe('entry tests', () => {
           expand: true,
           cwd: 'lib/tooltipster',
           src: ['*.js'],
-          dest: 'build/lib/tooltipster/'
+          dest: 'build/minifiable-lib/tooltipster/'
         },
         {
           expand: true,
           cwd: 'lib/marked',
           src: ['marked*.js'],
-          dest: 'build/lib/marked/'
+          dest: 'build/minifiable-lib/marked/'
         },
         {
           expand: true,
           cwd: 'lib/phaser',
           src: ['*.js'],
-          dest: 'build/lib/phaser/'
+          dest: 'build/minifiable-lib/phaser/'
         },
         {
           expand: true,
@@ -971,19 +971,6 @@ describe('entry tests', () => {
     }
   };
 
-  config.uglify = {
-    lib: {
-      files: _.fromPairs(
-        ['p5play/p5.play.js', 'p5play/p5.js'].map(function(src) {
-          return [
-            OUTPUT_DIR + src.replace(/\.js$/, '.min.js'), // dst
-            OUTPUT_DIR + src // src
-          ];
-        })
-      )
-    }
-  };
-
   config.watch = {
     // JS files watched by webpack
     style: {
@@ -1050,7 +1037,6 @@ describe('entry tests', () => {
   });
 
   grunt.loadTasks('tasks');
-  grunt.registerTask('noop', function() {});
 
   // Generate locale stub files in the build/locale/current folder
   grunt.registerTask('locales', function() {
@@ -1153,8 +1139,6 @@ describe('entry tests', () => {
     'prebuild',
     envConstants.DEV ? 'webpack:build' : 'webpack:uglify',
     'notify:js-build',
-    // Skip minification in development environment.
-    envConstants.DEV ? 'noop' : 'uglify:lib',
     'postbuild'
   ]);
 
