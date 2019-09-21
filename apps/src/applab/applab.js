@@ -727,14 +727,14 @@ Applab.init = function(config) {
   config.dropletConfig.additionalPredefValues.push('mySampleLibrary');
   config.dropletConfig.blocks.push({
     func: 'mySampleLibrary.myCoolFunction',
-    category: 'Functions',
-    scope: (function() {
-      function myCoolFunction() {
-        console.log('testing...testing...one...two...three');
-      }
-      return {myCoolFunction: myCoolFunction};
-    })(),
-    parent: 'mySampleLibrary.myCoolFunction'
+    category: 'Functions'
+    // scope: (function() {
+    //   function myCoolFunction() {
+    //     console.log('testing...testing...one...two...three');
+    //   }
+    //   return {myCoolFunction: myCoolFunction};
+    // })(),
+    // parent: 'mySampleLibrary.myCoolFunction'
   });
   // config.dropletConfig.blocks.push({
   //   "func": "mySampleLibrary",

@@ -237,7 +237,12 @@ export default class JSInterpreter {
       // code to override globals of the same names)
 
       // Now append the user code:
-      // options.code += "var mySampleLibrary = (function() {function myCoolFunction() {console.log('test');} return {myCoolFunction: myCoolFunction};})();";
+      // options.code = "var mySampleLibrary = (function() {function myCoolFunction() {console.log('test');} return {myCoolFunction: myCoolFunction};})();" + options.code
+
+      /// Well... It was in front of my nose the whole time.
+      this.interpreter.appendCode(
+        "var mySampleLibrary = (function() {function myCoolFunction() {console.log('test');} return {myCoolFunction: myCoolFunction};})();"
+      );
       this.interpreter.appendCode(options.code);
       // And repopulate scope since appendCode() doesn't do this automatically:
       this.interpreter.populateScope_(this.interpreter.ast, this.globalScope);
