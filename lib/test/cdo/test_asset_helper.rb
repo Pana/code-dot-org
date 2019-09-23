@@ -9,8 +9,8 @@ class AssetHelpersTest < Minitest::Test
 
   def test_valid_asset
     assert_equal(
-      '/assets/js/cookieBanner.d90978a8439431440869.min.js',
-      @asset_helper.webpack_asset_path('cookieBanner.js'),
+      '/blockly/js/cookieBanner.d90978a8439431440869.min.js',
+      @asset_helper.webpack_asset_path('js/cookieBanner.js'),
       "incorrect webpack asset path"
     )
   end
