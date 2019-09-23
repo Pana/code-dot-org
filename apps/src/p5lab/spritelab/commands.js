@@ -149,7 +149,9 @@ export const commands = {
    * to the generated function.
    */
   createNewSprite(name, animation, location) {
-    return spriteCommands.makeSprite.apply(this, [animation, location]);
+    return spriteCommands.makeSprite.apply(this, [
+      {name: name.name, animation: animation, location: location}
+    ]);
   },
 
   destroy(spriteId) {
@@ -169,7 +171,9 @@ export const commands = {
   },
 
   makeNewSpriteAnon(animation, location) {
-    spriteCommands.makeSprite.apply(this, [animation, location]);
+    spriteCommands.makeSprite.apply(this, [
+      {animation: animation, location: location}
+    ]);
   },
 
   setAnimation(spriteId, animation) {
