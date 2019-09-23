@@ -86,6 +86,9 @@ class ActiveSupport::TestCase
     DCDO.clear
 
     Rails.application.config.stubs(:levelbuilder_mode).returns false
+
+    AssetHelper.any_instance.stubs(:webpack_manifest_path).returns("#{CDO.root_dir}/lib/test/fixtures/webpack-manifest.json")
+    AssetHelper.any_instance.stubs(:webpack_asset_path).returns(nil)
   end
 
   teardown do
