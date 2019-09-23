@@ -244,11 +244,12 @@ describe('entry tests', () => {
           src: ['**'],
           dest: 'build/lib/piskel/'
         },
+        // Bramble must not be minified or digested in order to work properly.
         {
           expand: true,
           cwd: './node_modules/@code-dot-org/bramble/dist',
           src: ['**'],
-          dest: 'build/lib/bramble/'
+          dest: 'build/package/js/bramble/'
         },
         {
           expand: true,
