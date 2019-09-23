@@ -235,6 +235,7 @@ describe('entry tests', () => {
           src: ['p5.play.js'],
           dest: 'build/minifiable-lib/p5play/'
         },
+        // Piskel must not be minified or digested in order to work properly.
         {
           expand: true,
           // For some reason, if we provide piskel root as an absolute path here,
@@ -242,7 +243,7 @@ describe('entry tests', () => {
           // If we provide it as a relative path, that does not happen
           cwd: './' + path.relative(process.cwd(), piskelRoot),
           src: ['**'],
-          dest: 'build/lib/piskel/'
+          dest: 'build/package/js/piskel/'
         },
         // Bramble must not be minified or digested in order to work properly.
         {
