@@ -7,12 +7,13 @@ class AssetHelper
     "#{CDO.root_dir}/dashboard/public/blockly/js/manifest.json"
   end
 
-  def initialize
-    @webpack_manifest = JSON.parse(File.read(webpack_manifest_path))
+  def webpack_manifest
+    @webpack_manifest ||= JSON.parse(File.read(webpack_manifest_path))
   end
 
   def webpack_asset_path(asset)
-    path = @webpack_manifest[asset]
+    return "/blockly/#{asset}" if CDO.pretty_js
+    path = webpack_manifest[asset]
     raise "Invalid webpack asset name: '#{asset}'" unless path
     path
   end
