@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import ContentContainer from '../ContentContainer';
-import CourseBlocksTools from './CourseBlocksTools';
-import CourseBlocksInternationalGradeBands from './CourseBlocksInternationalGradeBands';
+// import CourseBlocksTools from './CourseBlocksTools';
+// import CourseBlocksInternationalGradeBands from './CourseBlocksInternationalGradeBands';
 import {NotificationResponsive} from '@cdo/apps/templates/Notification';
 import ProtectedStatefulDiv from '../ProtectedStatefulDiv';
 import i18n from '@cdo/locale';
@@ -206,7 +206,7 @@ export class CourseBlocksAll extends Component {
       <div>
         <CourseBlocksCsf showModern={this.props.showModernElementaryCourses} />
 
-        <ContentContainer
+        {/* <ContentContainer
           heading={i18n.teacherCourseHoc()}
           description={i18n.teacherCourseHocDescription()}
           linkText={i18n.teacherCourseHocLinkText()}
@@ -217,7 +217,7 @@ export class CourseBlocksAll extends Component {
 
         {!this.props.isEnglish && <CourseBlocksInternationalGradeBands />}
 
-        <CourseBlocksTools isEnglish={this.props.isEnglish} />
+        <CourseBlocksTools isEnglish={this.props.isEnglish} /> */}
       </div>
     );
   }
