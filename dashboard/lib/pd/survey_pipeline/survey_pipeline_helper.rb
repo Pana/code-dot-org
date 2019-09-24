@@ -14,13 +14,25 @@ module Pd::SurveyPipeline::Helper
     WORKSHOP_TEACHER_ENGAGEMENT_CATEGORY = 'teacher_engagement'
   ]
 
-  # Summarize facilitator-specific and general workshop results from all workshops
+  # Summarize facilitator-specific and general workshop results from all related workshops
   # that a group of selected facilitators have facilitated.
   #
   # @param workshop [Pd::Workshop]
   # @param current_user [User]
-  #
   # @return [Hash]
+  #
+  def report_rollups_experiment(workshop, current_user)
+    # TODO: TBA
+  end
+
+  # Summarize facilitator-specific and general workshop results from all related workshops
+  # that a group of selected facilitators have facilitated.
+  #
+  # @param workshop [Pd::Workshop] the workshop user selects, which is used to find related workshops
+  # @param current_user [User] the user requesting survey report
+  # @return [Hash] a hash report with these keys :facilitators, :current_workshop,
+  #   :related_workshops, :facilitator_response_counts, :facilitator_averages, and :errors.
+  # @see SurveyRollupDecorator.decorate_facilitator_rollup for detailed return data structure.
   #
   def report_rollups(workshop, current_user)
     # Filter list of facilitators that the current user can see.
@@ -41,20 +53,11 @@ module Pd::SurveyPipeline::Helper
     reports
   end
 
-  # Summarize facilitator-specific results from all related workshops
-  # that a facilitator have facilitated.
+  # Summarize facilitator-specific results from all related workshops a facilitator have facilitated.
   #
-  # @param facilitator_id [Number] a valid user id
-  # @param workshop [Pd::Workshop] a valid workshop
-  #
-  # @return [Hash{:facilitators, :facilitator_response_counts, :facilitator_averages, :errors => Hash, Array}]
-  #   facilitators: {facilitator_id => fac_name}
-  #   facilitator_response_counts: {this_workshop, all_my_workshops => {facilitator_id => count}}
-  #   facilitator_averages: {
-  #     fac_name => {qcategory, qname => {this_workshop, all_my_workshops => score}},
-  #     questions => {qname => qtext}
-  #    }
-  #   errors: Array
+  # @param facilitator_id [Integer]
+  # @param workshop [Pd::Workshop]
+  # @return [Hash]
   #
   def report_facilitator_rollup(facilitator_id, workshop)
     context = {
@@ -72,6 +75,12 @@ module Pd::SurveyPipeline::Helper
     process_rollup_data context
   end
 
+  # Summarize general workshop results from all related workshops a facilitator have facilitated.
+  #
+  # @param facilitator_id [Integer]
+  # @param workshop [Pd::Workshop]
+  # @return [Hash]
+  #
   def report_workshop_rollup(facilitator_id, workshop)
     context = {
       current_workshop_id: workshop.id,
@@ -148,7 +157,6 @@ module Pd::SurveyPipeline::Helper
   #
   # @param workshop [Pd::Workshop]
   # @param current_user [User]
-  #
   # @return [Hash]
   #
   def report_single_workshop(workshop, current_user)
