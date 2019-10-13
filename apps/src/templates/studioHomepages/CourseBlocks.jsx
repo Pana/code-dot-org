@@ -153,10 +153,10 @@ class CourseBlocksCsfLegacy extends Component {
         </div>
         <br />
         <br />
-        <div className="row">
+        {/* <div className="row">
           <ProtectedStatefulDiv ref="twenty_hour" />
           <ProtectedStatefulDiv ref="unplugged" />
-        </div>
+        </div> */}
       </ContentContainer>
     );
   }
