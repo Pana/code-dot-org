@@ -150,7 +150,7 @@ module Dashboard
     config.enable_dependency_loading = true
 
     if CDO.newrelic_logging
-      require 'newrelic_rpm'
+      #require 'newrelic_rpm'
     end
 
     config.assets.image_optim = false unless CDO.image_optim
