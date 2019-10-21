@@ -10,9 +10,9 @@ import _ from 'lodash';
  *   leading slash.
  */
 export function pegasus(relativeUrl) {
-  if (window.dashboard && window.dashboard.CODE_ORG_URL) {
-    return window.dashboard.CODE_ORG_URL + relativeUrl;
-  }
+  // if (window.dashboard && window.dashboard.CODE_ORG_URL) {
+  //   return window.dashboard.CODE_ORG_URL + relativeUrl;
+  // }
   return relativeUrl;
 }
 
