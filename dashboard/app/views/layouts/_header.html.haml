@@ -72,11 +72,11 @@
       .navbar-header
         .row.header_row
           .header_left
-            .header_logo
-              - if current_user
-                = link_to(image_tag('logo.png'), '/home', {id: "logo_home_link"})
-              - else
-                = link_to(image_tag('logo.png'), CDO.code_org_url, {id: "logo_home_link"})
+            -# .header_logo
+            -#   - if current_user
+            -#     = link_to(image_tag('logo.png'), '/home', {id: "logo_home_link"})
+            -#   - else
+            -#     = link_to(image_tag('logo.png'), CDO.code_org_url, {id: "logo_home_link"})
             .project_info
           .header_middle
             - if should_show_progress

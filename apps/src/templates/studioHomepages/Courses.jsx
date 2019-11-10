@@ -65,13 +65,13 @@ class Courses extends Component {
           description={headingDescription}
           short={!isSignedOut}
         >
-          {isSignedOut && (
+          {/* {isSignedOut && (
             <Button
               href="/users/sign_up"
               color={Button.ButtonColor.gray}
               text={i18n.createAccount()}
             />
-          )}
+          )} */}
         </HeaderBanner>
 
         <ProtectedStatefulDiv ref="flashes" />
